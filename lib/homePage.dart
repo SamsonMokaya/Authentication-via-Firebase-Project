@@ -20,6 +20,9 @@ class HomePage extends StatelessWidget {
           IconButton(onPressed: signUserOut, icon: Icon(Icons.logout))
         ],
       ),
+      body: Center(
+        child: Text("Welcome back " + user.email!),
+      ),
     );
   }
 }
