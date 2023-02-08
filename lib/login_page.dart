@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import 'package:testingfb/myLoginButton.dart';
 import 'package:testingfb/square_tile.dart';
 
@@ -10,6 +11,7 @@ class LoginPage extends StatefulWidget {
 
   @override
   State<LoginPage> createState() => _LoginPageState();
+
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -22,12 +24,16 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return const AlertDialog(
-            title: Text("All fields are required"),
+          return AlertDialog(
+            title: Text("Incorrect Email or password"),
+            actions: <Widget>[
+              Text("Try Again")
+            ],
           );
         }
     );
   }
+
 
   //sign in user
   void signUserIn() async{
@@ -53,29 +59,23 @@ class _LoginPageState extends State<LoginPage> {
         }
     );
 
+
+
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
 
-      //poping the loading circle
       Navigator.pop(context);
 
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
+      Navigator.pop(context);
 
-      //poping the loading circle
-     Navigator.pop(context);
-      if (e.code == 'user-not-found') {
+     wrongEmailorPassword();
 
-        wrongEmailorPassword();
-      }
-
-     if (e.code == 'wrong-password') {
-
-       wrongEmailorPassword();
-     }
     }
+
 
 
   }
