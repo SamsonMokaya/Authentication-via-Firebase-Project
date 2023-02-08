@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:testingfb/myLoginButton.dart';
 import 'package:testingfb/square_tile.dart';
 
+import 'auth_service.dart';
+
 class LoginPage extends StatefulWidget {
 
   final Function()? onTap;
@@ -204,9 +206,16 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SquareTile(imagePath: 'assets/google.png',),
+                  SquareTile(
+                    imagePath: 'assets/google.png',
+                    onTap: ()=> AuthService().signInWithGoogle(),
+                  ),
                   const SizedBox(width: 10,),
-                  SquareTile(imagePath: 'assets/google.png',)
+
+                  SquareTile(
+                    imagePath: 'assets/google.png',
+                    onTap: ()=> AuthService().signInWithGoogle(),
+                  ),
                 ],
               ),
 
