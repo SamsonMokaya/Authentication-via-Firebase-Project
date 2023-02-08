@@ -18,27 +18,69 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  void wrongEmailorPassword(){
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            title: Text("All fields are required"),
+          );
+        }
+    );
+  }
+
   //sign in user
   void signUserIn() async{
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              title: Text("All fields are required"),
+            );
+          }
+      );
+      return;
+    }
 
     //show dialog circle
     showDialog(
         context: context,
-        builder: (context){
+        builder: (context) {
           return const Center(
             child: CircularProgressIndicator(),
           );
         }
-        );
-
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
     );
 
-    Navigator.pop(context);
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      //poping the loading circle
+      Navigator.pop(context);
+
+    } on FirebaseAuthException catch (e) {
+
+      //poping the loading circle
+     Navigator.pop(context);
+      if (e.code == 'user-not-found') {
+
+        wrongEmailorPassword();
+      }
+
+     if (e.code == 'wrong-password') {
+
+       wrongEmailorPassword();
+     }
+    }
+
+
   }
+
+
 
 
 
