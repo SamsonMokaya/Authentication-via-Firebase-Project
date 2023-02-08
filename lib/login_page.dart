@@ -20,15 +20,17 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void wrongEmailorPassword(){
+  void showErrorMessage(String message){
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Incorrect Email or password"),
-            actions: <Widget>[
-              Text("Try Again")
-            ],
+            backgroundColor: Colors.grey,
+            title: Center(
+              child: Text(
+                message,
+              ),
+            ),
           );
         }
     );
@@ -69,10 +71,35 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.pop(context);
 
-    } catch (e) {
+    } catch (error) {
       Navigator.pop(context);
 
-     wrongEmailorPassword();
+      String errorMessage;
+
+      if (error is FirebaseAuthException) {
+        switch (error.code) {
+          case "user-not-found":
+            errorMessage = "User not found.";
+            break;
+          case "wrong-password":
+            errorMessage = "Incorrect password.";
+            break;
+          case "network-request-failed":
+            errorMessage = "A network error has occured. Please ensure you on an internet connection";
+            break;
+          case "invalid-email":
+            errorMessage = "The email address is badly formatted";
+            break;
+          default:
+            errorMessage = "An error occurred. Please try again.";
+            break;
+        }
+
+       showErrorMessage(errorMessage);
+
+      }
+
+      // showErrorMessage(error.toString());
 
     }
 
