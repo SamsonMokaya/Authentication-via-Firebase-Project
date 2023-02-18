@@ -3,10 +3,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:testingfb/myLoginButton.dart';
+import 'package:testingfb/myButton.dart';
 import 'package:testingfb/square_tile.dart';
 
-import 'auth_service.dart';
+
 
 class RegisterPage extends StatefulWidget {
 
@@ -202,7 +202,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
 
               //sign in button
-              myLoginButton(
+              myButton(
                 onTap: signUserUp,
                 text: "Sign Up",
               ),
@@ -247,13 +247,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   SquareTile(
                     imagePath: 'assets/google.png',
-                    onTap: ()=> AuthService().signInWithGoogle(),
-                  ),
-                  const SizedBox(width: 10,),
-
-                  SquareTile(
-                    imagePath: 'assets/google.png',
-                    onTap: ()=> AuthService().signInWithGoogle(),
+                    onTap: (){},
                   ),
                 ],
               ),
