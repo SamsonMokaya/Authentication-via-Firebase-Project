@@ -4,7 +4,6 @@ import 'package:testingfb/myButton.dart';
 
 class ReminderForm extends StatefulWidget {
 
-
   final Function()? onTap;
 
   ReminderForm({required this.onTap});
@@ -16,8 +15,6 @@ class ReminderForm extends StatefulWidget {
 class _ReminderFormState extends State<ReminderForm> {
   final _titleController = TextEditingController();
   final _dateController = TextEditingController();
-
-
 
   void _saveReminder() {
     print("Data saved");
@@ -43,25 +40,39 @@ class _ReminderFormState extends State<ReminderForm> {
         ),
         GestureDetector(
           onTap: () async {
-            DateTime? picked = await showDatePicker(
+            DateTime? date = await showDatePicker(
               context: context,
               initialDate: DateTime.now(),
               firstDate: DateTime.now(),
               lastDate: DateTime(3000),
             );
-            if (picked != null) {
-              _dateController.text = DateFormat.yMd().format(picked);
+            if (date != null) {
+              TimeOfDay? time = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+              if (time != null) {
+                DateTime dateTime = DateTime(
+                  date.year,
+                  date.month,
+                  date.day,
+                  time.hour,
+                  time.minute,
+                );
+                _dateController.text = DateFormat.yMd().add_jm().format(dateTime);
+              }
             }
           },
           child: AbsorbPointer(
             child: TextFormField(
               controller: _dateController,
               decoration: InputDecoration(
-                labelText: 'Date',
+                labelText: 'Date and Time',
               ),
             ),
           ),
         ),
+
         myButton(onTap: _saveReminder, text: "Save Reminder")
       ],
     );

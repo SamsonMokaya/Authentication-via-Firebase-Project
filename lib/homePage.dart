@@ -34,6 +34,8 @@ class _HomePageState extends State<HomePage> {
       showErrorMessage("Fields should not be empty");
     }else{
 
+      Navigator.pop(context);
+
       Map <String, dynamic> data = {
         "date":_dateController.text,
         "title":_titleController.text,
@@ -42,9 +44,17 @@ class _HomePageState extends State<HomePage> {
 
       try {
         await FirebaseFirestore.instance.collection("reminders").add(data);
-        print("Stored");
+
+        showErrorMessage("Reminder added");
+
+        //clear the fields
+        _titleController.clear();
+        _dateController.clear();
+
 
         Navigator.pop(context);
+
+
 
       }on FirebaseFirestore catch (error) {
         Navigator.pop(context);
