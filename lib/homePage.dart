@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:testingfb/DatesPage.dart';
+
 
 
 
@@ -41,7 +42,6 @@ class _HomePageState extends State<HomePage> {
         "title":_titleController.text,
       };
 
-
       try {
         await FirebaseFirestore.instance.collection("reminders").add(data);
 
@@ -63,6 +63,31 @@ class _HomePageState extends State<HomePage> {
 
     }
 
+  }
+
+  Future<List<String>> _fetchDatesFromFirebase() async {
+    final snapshots = await FirebaseFirestore.instance
+        .collection('reminders')
+        .get();
+
+    final dates = snapshots.docs
+        .map((doc) => doc.data()['date'].toString())
+        .toList();
+
+    return dates;
+  }
+
+
+  Future<void> _navigateToDatesPage() async {
+
+    List<String> storedDates = await _fetchDatesFromFirebase();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DatesPage(storedDates: storedDates),
+      ),
+    );
   }
 
   void _openReminderForm(BuildContext context) {
@@ -156,6 +181,16 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openReminderForm(context),
         child: Icon(Icons.add),
+      ),
+      // New button added here
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 50,
+          child: ElevatedButton(
+            onPressed: _navigateToDatesPage,
+            child: Text('View Dates'),
+          ),
+        ),
       ),
     );
   }
