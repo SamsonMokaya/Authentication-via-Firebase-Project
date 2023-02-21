@@ -9,7 +9,7 @@ class DatesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey[800],
+        backgroundColor: Colors.deepPurpleAccent,
         title: Text('Dates'),
       ),
       body: ListView.builder(

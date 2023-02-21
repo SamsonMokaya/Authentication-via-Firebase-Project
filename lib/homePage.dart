@@ -38,18 +38,23 @@ class _HomePageState extends State<HomePage> {
       try {
         await FirebaseFirestore.instance.collection("reminders").add(data);
 
-        // Fluttertoast.showToast(msg: 'Reminder saved successfully!');
-
         //clear the fields
         _titleController.clear();
         _dateController.clear();
 
-        Navigator.pop(context);
+
+        Fluttertoast.showToast(
+          msg: 'Reminder saved successfully!',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.grey[500],
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
 
       } on FirebaseFirestore catch (error) {
-        Navigator.pop(context);
-
-        showErrorMessage(error as String);
+        showErrorMessage("Try again");
       }
     }
   }
@@ -153,29 +158,51 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final user = auth.currentUser!;
     return Scaffold(
+      backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        backgroundColor: Colors.blue[200],
+        backgroundColor: Colors.deepPurpleAccent,
         actions: [
           IconButton(onPressed: signUserOut, icon: Icon(Icons.logout))
         ],
       ),
-      body: Center(
-        child: Text("Welcome back " + user.email!),
+      body: Container(
+        child: Column(
+          children: [
+            Text("Welcome back " + user.email!),
+
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openReminderForm(context),
         child: Icon(Icons.add),
+        backgroundColor: Colors.deepPurpleAccent,
       ),
       // New button added here
       bottomNavigationBar: BottomAppBar(
+        color: Colors.grey[300],
         child: Container(
           height: 50,
+          padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 8),
           child: ElevatedButton(
             onPressed: _navigateToDatesPage,
-            child: Text('View Dates'),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.deepPurpleAccent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Text(
+              'View Saved Reminders',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       ),
+
     );
   }
 }
