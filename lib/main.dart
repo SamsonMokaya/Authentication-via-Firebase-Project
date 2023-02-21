@@ -6,7 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:testingfb/auth.dart';
 import 'package:testingfb/firebase_options.dart';
 import 'package:flutter/material.dart';
-import 'login_page.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
