@@ -39,6 +39,8 @@ dependencies:
   firebase_auth: ^4.2.8
   firebase_core: ^2.6.1
   cloud_firestore: ^4.4.2
+  flutter_local_notifications: ^8.2.0
+  fluttertoast: ^8.2.1
 
 
 

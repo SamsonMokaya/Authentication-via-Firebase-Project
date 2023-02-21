@@ -16,9 +16,6 @@ class _ReminderFormState extends State<ReminderForm> {
   final _titleController = TextEditingController();
   final _dateController = TextEditingController();
 
-  void _saveReminder() {
-    print("Data saved");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,33 +44,21 @@ class _ReminderFormState extends State<ReminderForm> {
               lastDate: DateTime(3000),
             );
             if (date != null) {
-              TimeOfDay? time = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-              );
-              if (time != null) {
-                DateTime dateTime = DateTime(
-                  date.year,
-                  date.month,
-                  date.day,
-                  time.hour,
-                  time.minute,
-                );
-                _dateController.text = DateFormat.yMd().add_jm().format(dateTime);
-              }
+              _dateController.text = DateFormat.yMd().format(date);
             }
           },
           child: AbsorbPointer(
             child: TextFormField(
               controller: _dateController,
               decoration: InputDecoration(
-                labelText: 'Date and Time',
+                labelText: 'Date',
               ),
             ),
           ),
         ),
 
-        myButton(onTap: _saveReminder, text: "Save Reminder")
+
+        myButton(onTap: (){}, text: "Save Reminder")
       ],
     );
   }

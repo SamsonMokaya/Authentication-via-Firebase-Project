@@ -4,13 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:testingfb/DatesPage.dart';
-
-
-
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'myButton.dart';
-import 'reminder.dart';
-
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,68 +13,56 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final _titleController = TextEditingController();
   final _dateController = TextEditingController();
-  final FirebaseAuth auth = FirebaseAuth.instance; 
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   void signUserOut() {
     auth.signOut();
   }
 
-  void _saveReminder() async{
+  void _saveReminder() async {
     print(_titleController.text);
     print(_dateController.text);
 
-    if(_titleController.text.trim().isEmpty || _dateController.text.trim().isEmpty){
+    if (_titleController.text.trim().isEmpty || _dateController.text.trim().isEmpty) {
       showErrorMessage("Fields should not be empty");
-    }else{
-
+    } else {
       Navigator.pop(context);
 
-      Map <String, dynamic> data = {
-        "date":_dateController.text,
-        "title":_titleController.text,
+      Map<String, dynamic> data = {
+        "date": _dateController.text,
+        "title": _titleController.text,
       };
 
       try {
         await FirebaseFirestore.instance.collection("reminders").add(data);
 
-        showErrorMessage("Reminder added");
+        // Fluttertoast.showToast(msg: 'Reminder saved successfully!');
 
         //clear the fields
         _titleController.clear();
         _dateController.clear();
 
-
         Navigator.pop(context);
 
-
-
-      }on FirebaseFirestore catch (error) {
+      } on FirebaseFirestore catch (error) {
         Navigator.pop(context);
-        showErrorMessage("Try again");
+
+        showErrorMessage(error as String);
       }
-
     }
-
   }
 
   Future<List<String>> _fetchDatesFromFirebase() async {
-    final snapshots = await FirebaseFirestore.instance
-        .collection('reminders')
-        .get();
+    final snapshots = await FirebaseFirestore.instance.collection('reminders').get();
 
-    final dates = snapshots.docs
-        .map((doc) => doc.data()['date'].toString())
-        .toList();
+    final dates = snapshots.docs.map((doc) => doc.data()['date'].toString()).toList();
 
     return dates;
   }
 
-
   Future<void> _navigateToDatesPage() async {
-
     List<String> storedDates = await _fetchDatesFromFirebase();
 
     Navigator.push(
@@ -131,7 +114,8 @@ class _HomePageState extends State<HomePage> {
                         labelText: 'Date',
                       ),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
+                        if (value == null || value
+                            .isEmpty) {
                           return 'Please enter a date';
                         }
                         return null;
